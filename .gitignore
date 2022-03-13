@@ -1,0 +1,5 @@
+*.toc
+*.log
+*.out
+*.aux
+decodage_syndrome/.ipynb_checkpoints/
