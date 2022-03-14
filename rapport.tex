@@ -1,9 +1,9 @@
-\documentclass{scrartcl}[a4paper,10pt,headings=small,footinclude=false]
+\documentclass{scrartcl}[a4paper,9pt,headings=small,footinclude=false]
 \usepackage[bottom=3cm,top=3cm,
   %,showframe% <- only to show the page layout
 ]{geometry}
 \setkomafont{disposition}{\normalfont\bfseries}
-%\setkomafont{section}{\normalfont\normalsize\bfseries}
+\setkomafont{section}{\normalfont\normalsize\bfseries}
 \setlength{\parskip}{.5em}
 \usepackage[french]{babel}
 %\usepackage[default]{fontsetup}
@@ -22,14 +22,18 @@
 \usepackage{hyperref}
 \usepackage{fontspec}
 \usepackage{unicode-math}
+
 %\setmathfont{STIX Two Math}
 %\setmainfont{STIX Two Text}
 %\setmainfont{Latin Modern Roman}
 %\setmathfont{Latin Modern Math}
-\usepackage[default]{fontsetup}
+%\usepackage[default]{fontsetup}
 \usepackage{amsfonts,amsmath,amsthm,stmaryrd,bm}
 \usepackage[frenchkw,linesnumbered]{algorithm2e}
 \usepackage{enumitem}
+
+\setmainfont{TeX Gyre Pagella}
+\setmathfont[math-style=ISO,bold-style=ISO]{TeX Gyre Pagella Math}
 
 \theoremstyle{definition}
 \newtheorem{theorem}{Théorème}[section]
@@ -45,7 +49,7 @@
 \newtheorem*{exercise}{Exercice}
 %\renewcommand{\qedsymbol}{$\vrectangle$}
 
-\renewcommand{\qedsymbol}{}
+%\renewcommand{\qedsymbol}{}
 
 
 \usepackage{graphicx}
@@ -267,15 +271,23 @@ Si $\mathcal{L}_1\cap \mathcal{L}_2\neq \emptyset$, on a des solutions $\textbf{
 L'algorithme est correct, et la preuve est analogue à celle de Lee-Brickell (même calcul avec $\textbf{e}_I=\textbf{x}_1+\textbf{x}_2$).
 
 On se place dans le pire des cas ($|\textbf{e}|=w$).
-Une solution est trouvée à la fin d'une itération si $\textbf{e}_i$ est de poids $p$ (événement $E_1$), que de plus le poids de $\textbf{e}_i$ soit distribué de manière égale en $\textbf{x}_1$ et $\textbf{x}_2$ (événement $E_2$), et enfin que $l$ positions de $\textbf{e}_j$ de poids $w-p$ soient nulles (événement $E_3$).
+Une solution est trouvée à la fin d'une itération si $\textbf{e}_I$ est de poids $p$ (événement $E_1$), que de plus le poids de $\textbf{e}_I$ soit distribué de manière égale en $\textbf{x}_1$ et $\textbf{x}_2$ (événement $E_2$), et enfin que $l$ positions de $\textbf{e}_J$ de poids $w-p$ soient nulles (événement $E_3$).
 
-On obtient, les événements étant indépendants:
+On obtient que la probabilité de trouver une solution spécifique est, les événements étant indépendants:
 
 \begin{align*}
-\mathbb{P}_{\text{succès}} &\geq P(E_1 \wedge E_2 \wedge E_3)\\
-&\geq \mathbb{P}(E_1) \mathbb{P}(E_2) \mathbb{P}(E_3)\\
+\mathbb{P}_{\text{succès}} &\geq \mathbb{P}(E_1 \wedge E_2 \wedge E_3)\\
+&\geq \mathbb{P}(E_1) \mathbb{P}(E_2) \mathbb{P}(E_3) \\
 &\geq \frac{\binom{k}{p}\binom{n-k}{w-p}}{\binom{n}{w}} \frac{\binom{k/2}{p/2}^2}{\binom{k}{p}} \frac{\binom{n-k-(w-p)}{l}}{\binom{n-k}{l}} \quad \text{car les puissances de } (q-1) \text{ se simplifient}\\
-&\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w}} \quad \text{car } \frac{\binom{n-k}{w-p}\binom{n-k-(w-p)}{l}}{\binom{n-k}{l}} = \binom{n-k-l}{w-p} \text{ en explicitant les factorielles}.
+&\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w}} \quad \text{car } \frac{\binom{n-k}{w-p}\binom{n-k-(w-p)}{l}}{\binom{n-k}{l}} = \binom{n-k-l}{w-p} \text{ en explicitant les factorielles}\\
+&\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w}}.
+\end{align*}
+
+Donc la probabilité de trouver n'importe quelle solution est
+
+\begin{align*}
+\mathbb{P}_{\text{succès}} &\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w}}\max \{ 1, |\text{DecSynd}(\textbf{H},\textbf{s},w)| \}\\
+&\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w} \min \{ 1, \frac{q^{n-k}}{\binom{n}{w}(q-1)^w} \}}.
 \end{align*}
 
 Le coût d'une itération est dominé par la recherche de collision et les multiplications de matrices: $C=\binom{k/2}{p/2}(q-1)^{p/2}(k/2)^3$.
@@ -284,14 +296,14 @@ On obtient donc comme complexité temporelle
 
 \begin{align*}
 	T_{Stern} &= C \cdot \frac{1}{P_{Stern}}\\
-	&= \binom{k/2}{p/2}(q-1)^{p/2}(k/2)^3 \frac{\binom{n}{w}(q-1)^w}{\binom{k/2}{p/2}^2 (q-1)^p \binom{n-k-l}{w-p}(q-1)^{w-p}}\\
-	&= O\Big(k^3 \frac{\binom{n}{w}(q-1)^w}{\binom{k/2}{p/2} (q-1)^{p/2} \binom{n-k-l}{w-p}(q-1)^{w-p}}\Big).
+	&= \binom{k/2}{p/2}(q-1)^{p/2}(k/2)^3 \frac{\binom{n}{w}(q-1)^w \min \{ 1, \frac{q^{n-k}}{\binom{n}{w}(q-1)^w} \} }{\binom{k/2}{p/2}^2 (q-1)^p \binom{n-k-l}{w-p}(q-1)^{w-p}}\\
+	&= O\Big(k^3 \frac{\min \{ \binom{n}{w}(q-1)^w, q^{n-k}\} }{\binom{k/2}{p/2} (q-1)^{p/2} \binom{n-k-l}{w-p}(q-1)^{w-p}}\Big).
 \end{align*}
 
 Sa complexité asymptotique est, pour $w=\lfloor \omega n \rfloor, p = \lfloor \rho n \rfloor, l= \lfloor \lambda  n \rfloor$, $\tilde{O}(q^{n\alpha})$ avec
 
 \[
-	\alpha \coloneq h_q(\omega)-\frac{R}{2} h_q(\frac{\rho}{R}) - (1-R-\lambda)h_q(\frac{\omega - \rho}{1 - R - \lambda}).
+	\alpha \coloneq \min\{ h_q(\omega), 1-R \} -\frac{R}{2} h_q(\frac{\rho}{R}) - (1-R-\lambda)h_q(\frac{\omega - \rho}{1 - R - \lambda}).
 \]
 
 \begin{figure}[h!]
@@ -301,9 +313,7 @@ Sa complexité asymptotique est, pour $w=\lfloor \omega n \rfloor, p = \lfloor \
 \label{fig:prange}
 \end{figure}
 
-
 \newpage
 \section{Décodage en liste}
-
 
 \end{document}
