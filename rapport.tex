@@ -1,4 +1,5 @@
 \documentclass{scrartcl}[a4paper,9pt,headings=small,footinclude=false]
+
 \usepackage[bottom=3cm,top=3cm,
   %,showframe% <- only to show the page layout
 ]{geometry}
@@ -23,8 +24,8 @@
 \usepackage{fontspec}
 \usepackage{unicode-math}
 
-%\setmathfont{STIX Two Math}
-%\setmainfont{STIX Two Text}
+\setmathfont[math-style=ISO,bold-style=ISO]{STIX Two Math}
+\setmainfont{STIX Two Text}
 %\setmainfont{Latin Modern Roman}
 %\setmathfont{Latin Modern Math}
 %\usepackage[default]{fontsetup}
@@ -32,8 +33,8 @@
 \usepackage[frenchkw,linesnumbered]{algorithm2e}
 \usepackage{enumitem}
 
-\setmainfont{TeX Gyre Pagella}
-\setmathfont[math-style=ISO,bold-style=ISO]{TeX Gyre Pagella Math}
+%\setmainfont{TeX Gyre Pagella}
+%\setmathfont[math-style=ISO,bold-style=ISO]{TeX Gyre Pagella Math}
 
 \theoremstyle{definition}
 \newtheorem{theorem}{Théorème}[section]
@@ -69,26 +70,26 @@
 \begin{algorithm}[H]
     \renewcommand{\algorithmcfname}{Algorithme}%
     \SetAlgoLined
-    \Donnees{$\textbf{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\textbf{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
-    \Res{$\textbf{e}\in\mathbb{F}_q^{n}$ tel que $\textbf{H}\textbf{e}^T = \textbf{s}$ et $|\textbf{e}|\leq w$.}
-    \Repeter{$|\textbf{s}'| \leq w$}{
+    \Donnees{$\symbfit{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\symbfit{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
+    \Res{$\symbfit{e}\in\mathbb{F}_q^{n}$ tel que $\symbfit{H}\symbfit{e}^T = \symbfit{s}$ et $|\symbfit{e}|\leq w$.}
+    \Repeter{$|\symbfit{s}'| \leq w$}{
         Choisir $I\subseteq \llbracket 1,n\rrbracket$ tel que $|I|=k$ et $J=\llbracket 1,n\rrbracket \setminus I$
 
-        \Si{$\textbf{H}_{J}$ est inversible}{
-            $\textbf{s}'\leftarrow\textbf{H}_{J}^{-1}\textbf{s}^T$
+        \Si{$\symbfit{H}_{J}$ est inversible}{
+            $\symbfit{s}'\leftarrow\symbfit{H}_{J}^{-1}\symbfit{s}^T$
         }
     }
-    \Retour{$\textbf{e}$ tel que $\textbf{e}_I=\textbf{0}$ et $\textbf{e}_J = \textbf{s}'^T$.}
+    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{0}$ et $\symbfit{e}_J = \symbfit{s}'^T$.}
 \caption{Algorithme de Prange (1962) (type Las Vegas)}
 \end{algorithm}
 \begin{proof}[Preuve de l'algorithme de Prange]
-On a bien $|\textbf{e}|=\underbrace{|\textbf{e}_I|}_{= 0}+|\textbf{e}_J|\leq w$ car $I$ et $J$ sont disjoints.
-De plus la sortie $\textbf{e}$ de l'algorithme vérifie bien
+On a bien $|\symbfit{e}|=\underbrace{|\symbfit{e}_I|}_{= 0}+|\symbfit{e}_J|\leq w$ car $I$ et $J$ sont disjoints.
+De plus la sortie $\symbfit{e}$ de l'algorithme vérifie bien
 \begin{align*}
-    \textbf{He}^T &= \textbf{H}(\textbf{e}_I+\textbf{e}_J)^T\\
-    &= \textbf{H}_I \textbf{e}_I^T + \textbf{H}_J \textbf{e}_J^T\\
-    &= \textbf{0} + \textbf{H}_J \textbf{H}_J^{-1} \textbf{s}\\
-    &= \textbf{s}.
+    \symbfit{He}^T &= \symbfit{H}(\symbfit{e}_I+\symbfit{e}_J)^T\\
+    &= \symbfit{H}_I \symbfit{e}_I^T + \symbfit{H}_J \symbfit{e}_J^T\\
+    &= \symbfit{0} + \symbfit{H}_J \symbfit{H}_J^{-1} \symbfit{s}\\
+    &= \symbfit{s}.
 \end{align*}
 \end{proof}
 
@@ -99,11 +100,11 @@ La complexité de Prange est
 \[ T_{\text{Prange}} = O\Bigg(\frac{\min \big\{ \binom{n}{w}(q-1)^w, q^{n-k} \big\}}{\binom{n-k}{w}(q-1)^w}\Bigg). \]
 
 \begin{proof}
-La probabilité de succès d'une itération de l'algorithme est dans le pire cas ($|\textbf{e}|=w$):
-\[ \mathbb{P}_{\text{succès}} \geq \frac{\binom{n-k}{w}(q-1)^w}{\binom{n}{w}(q-1)^w} \max \{1, |\text{DecSynd}(\textbf{H},\textbf{s},w)|\}\]
+La probabilité de succès d'une itération de l'algorithme est dans le pire cas ($|\symbfit{e}|=w$):
+\[ \mathbb{P}_{\text{succès}} \geq \frac{\binom{n-k}{w}(q-1)^w}{\binom{n}{w}(q-1)^w} \max \{1, |\text{DecSynd}(\symbfit{H},\symbfit{s},w)|\}\]
 
 avec 
-\[ |\text{DecSynd}(\textbf{H},\textbf{s},w)| = q^k \frac{\binom{n}{w}(q-1)^w}{q^n}. \]
+\[ |\text{DecSynd}(\symbfit{H},\symbfit{s},w)| = q^k \frac{\binom{n}{w}(q-1)^w}{q^n}. \]
 
 D'où
 \begin{align*}
@@ -139,32 +140,32 @@ $T_{Prange}$ est maximal lorsque $\tbinom{n}{w}(q-1)^w=q^{n-k}$ donc lorsque $w=
 
 \subsection{Algorithme de Lee-Brickell}
 
-L'idée est de relaxer la condition de Prange ($|\textbf{e}_I|=0$) pour amortir le coût de l'élimination gaussienne: on prend $p\geq 0$ petit et on l'on retourne un vecteur $\textbf{e}$ tel que $|\textbf{e}_I|=p$ et $|\textbf{e}_J|\leq w-p$. Si $p=0$ il s'agit exactement de l'algo de Prange.
+L'idée est de relaxer la condition de Prange ($|\symbfit{e}_I|=0$) pour amortir le coût de l'élimination gaussienne: on prend $p\geq 0$ petit et on l'on retourne un vecteur $\symbfit{e}$ tel que $|\symbfit{e}_I|=p$ et $|\symbfit{e}_J|\leq w-p$. Si $p=0$ il s'agit exactement de l'algo de Prange.
 
 \begin{algorithm}[H]
     \renewcommand{\algorithmcfname}{Algorithme}%
     \SetAlgoLined
-    \Donnees{$\textbf{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\textbf{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
-    \Res{$\textbf{e}\in\mathbb{F}_q^{n}$ tel que $\textbf{H}\textbf{e}^T = \textbf{s}$ et $|\textbf{e}|\leq w$.}
-    \Repeter{$\exists \textbf{y}\in\mathcal{L}, |\textbf{y}|\leq w-p$}{
+    \Donnees{$\symbfit{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\symbfit{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
+    \Res{$\symbfit{e}\in\mathbb{F}_q^{n}$ tel que $\symbfit{H}\symbfit{e}^T = \symbfit{s}$ et $|\symbfit{e}|\leq w$.}
+    \Repeter{$\exists \symbfit{y}\in\mathcal{L}, |\symbfit{y}|\leq w-p$}{
         Choisir un ensemble d'information $I\subseteq\llbracket 1,n\rrbracket$, $|I|=k$, et son complémentaire $J$
         
-        \Si{$\textbf{H}_{J}$ est inversible}{
-            $\mathcal{L}\leftarrow\{ \textbf{H}_J^{-1}\textbf{s} - \textbf{H}_J^{-1}\textbf{H}_I\textbf{x}^T : |\textbf{x}|=p\}$
+        \Si{$\symbfit{H}_{J}$ est inversible}{
+            $\mathcal{L}\leftarrow\{ \symbfit{H}_J^{-1}\symbfit{s} - \symbfit{H}_J^{-1}\symbfit{H}_I\symbfit{x}^T : |\symbfit{x}|=p\}$
         }
     }
-    \Retour{$\textbf{e}$ tel que $\textbf{e}_I=\textbf{x}$ et $\textbf{e}_J = \textbf{y}^T$ ($\textbf{y}$ obtenu à partir de $\textbf{x}$, $\mathcal{L}$ est une table de hachage).}
+    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{x}$ et $\symbfit{e}_J = \symbfit{y}^T$ ($\symbfit{y}$ obtenu à partir de $\symbfit{x}$, $\mathcal{L}$ est une table de hachage).}
 \caption{Algorithme de Lee-Brickell}
 \end{algorithm}
 
 \begin{proof}[Preuve de l'algorithme de Lee-Brickell]
-On a bien $|\textbf{e}|=|\textbf{e}_I|+|\textbf{e}_J|\leq p + (w - p)\leq w$ car $I$ et $J$ sont disjoints.
-De plus la sortie $\textbf{e}$ de l'algorithme vérifie bien
+On a bien $|\symbfit{e}|=|\symbfit{e}_I|+|\symbfit{e}_J|\leq p + (w - p)\leq w$ car $I$ et $J$ sont disjoints.
+De plus la sortie $\symbfit{e}$ de l'algorithme vérifie bien
 \begin{align*}
-    \textbf{He}^T &= \textbf{H}(\textbf{e}_I+\textbf{e}_J)^T\\
-    &= \textbf{H}_I \textbf{x}^T + \textbf{H}_J \textbf{y}\\
-    &= \textbf{H}_I \textbf{x}^T + \textbf{H}_J (\textbf{H}_J^{-1}\textbf{s} - \textbf{H}_J^{-1}\textbf{H}_I\textbf{x}^T)\\
-    &= \textbf{s}.
+    \symbfit{He}^T &= \symbfit{H}(\symbfit{e}_I+\symbfit{e}_J)^T\\
+    &= \symbfit{H}_I \symbfit{x}^T + \symbfit{H}_J \symbfit{y}\\
+    &= \symbfit{H}_I \symbfit{x}^T + \symbfit{H}_J (\symbfit{H}_J^{-1}\symbfit{s} - \symbfit{H}_J^{-1}\symbfit{H}_I\symbfit{x}^T)\\
+    &= \symbfit{s}.
 \end{align*}
 \end{proof}
 
@@ -173,11 +174,11 @@ Le coût d'une itération est dominé par l'énumération $C=n(n-k)^2(\log^2 q) 
 
 
 % Faux! à recalculer, mais oui on gagne un facteur poly
-La proba de succès est dans le pire cas ($|\textbf{e}|=w$):
+La proba de succès est dans le pire cas ($|\symbfit{e}|=w$):
 
 \begin{align*}
-\mathbb{P}_{\text{succès}} &\geq  \frac{\binom{n-k}{w-p}(q-1)^{w-p} \binom{k}{p}(q-1)^{p}}{\binom{n}{w}(q-1)^w} \max \{ 1, |\text{DecSynd}(\textbf{H},\textbf{s},w)|\}\\
-&\geq  \frac{\binom{n-k}{w-p} \binom{k}{p}}{\binom{n}{w}} \max \{ 1, |\text{DecSynd}(\textbf{H},\textbf{s},w)|\}\\
+\mathbb{P}_{\text{succès}} &\geq  \frac{\binom{n-k}{w-p}(q-1)^{w-p} \binom{k}{p}(q-1)^{p}}{\binom{n}{w}(q-1)^w} \max \{ 1, |\text{DecSynd}(\symbfit{H},\symbfit{s},w)|\}\\
+&\geq  \frac{\binom{n-k}{w-p} \binom{k}{p}}{\binom{n}{w}} \max \{ 1, |\text{DecSynd}(\symbfit{H},\symbfit{s},w)|\}\\
 &\geq  \frac{\binom{n-k}{w-p} \binom{k}{p}}{\binom{n}{w}} \max \{ 1, q^k \frac{\binom{n}{w}(q-1)^w}{q^n}\}\\
 &\geq  \binom{n-k}{w-p} \binom{k}{p} \max \{ \frac{1}{\binom{n}{w}}, \frac{(q-1)^w}{q^{n-k}}\}\\
 &\geq  \binom{n-k}{w-p} \binom{k}{p} \frac{1}{\min \{ \binom{n}{w}, \frac{q^{n-k}}{(q-1)^w}\}}\\
@@ -222,7 +223,7 @@ f(w)= \frac{1}{2} h_q\bigg(\frac{2(w - p)}{n}\bigg).
 \]
 
 
-Sauf pour $w$ très petit ou très grand, $p=2$ est optimal.
+Sauf pour $w$ très petit ou très grand, et $q=2$, $p=2$ est optimal.
 
 
 
@@ -231,47 +232,47 @@ Sauf pour $w$ très petit ou très grand, $p=2$ est optimal.
 L'idée est de combiner Lee-Brickell et le décodage par paradoxe des anniversaires. On effectue une élimination gaussienne partielle.
 
 Décodage par le paradoxe des anniversaires:
-Problème: trouver au plus $w$ colonnes de $\textbf{H}$ dont la somme vaut $\textbf{s}$ sur $\mathbb{F}_q$.
+Problème: trouver au plus $w$ colonnes de $\symbfit{H}$ dont la somme vaut $\symbfit{s}$ sur $\mathbb{F}_q$.
 
-Solution: scinder $\textbf{H}$ en deux parties égales et énumérer les deux ensembles
-\[\mathcal{L}_1=\big\{ \textbf{s}-\textbf{H}_1\textbf{e}_1^T : wt(\textbf{e}_1) =\frac{w}{2} \big\}\]
-et \[\mathcal{L}_2=\big\{ \textbf{H}_2 \textbf{e}_2^T : wt(\textbf{e}_2) = \frac{w}{2}\big\}.\]
-Si $\mathcal{L}_1\cap \mathcal{L}_2\neq \emptyset$, on a des solutions $\textbf{s}-\textbf{H}\textbf{e}_1^T-\textbf{H}_2\textbf{e}_2^T=\textbf{0}$.
+Solution: scinder $\symbfit{H}$ en deux parties égales et énumérer les deux ensembles
+\[\mathcal{L}_1=\big\{ \symbfit{s}-\symbfit{H}_1\symbfit{e}_1^T : wt(\symbfit{e}_1) =\frac{w}{2} \big\}\]
+et \[\mathcal{L}_2=\big\{ \symbfit{H}_2 \symbfit{e}_2^T : wt(\symbfit{e}_2) = \frac{w}{2}\big\}.\]
+Si $\mathcal{L}_1\cap \mathcal{L}_2\neq \emptyset$, on a des solutions $\symbfit{s}-\symbfit{H}\symbfit{e}_1^T-\symbfit{H}_2\symbfit{e}_2^T=\symbfit{0}$.
 
 \begin{algorithm}[H]
     \renewcommand{\algorithmcfname}{Algorithme}%
     \SetAlgoLined
-    \Donnees{$\textbf{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\textbf{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
-    \Res{$\textbf{e}_\in\mathbb{F}_q^{n}$ tel que $\textbf{H}\textbf{e}^T = \textbf{s}$ et $|\textbf{e}|\leq w$.}
-    $X=\{ \textbf{x}\in\mathbb{F}_q^{k/2} :|\textbf{x}| =\frac{p}{2} \}$
+    \Donnees{$\symbfit{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\symbfit{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
+    \Res{$\symbfit{e}_\in\mathbb{F}_q^{n}$ tel que $\symbfit{H}\symbfit{e}^T = \symbfit{s}$ et $|\symbfit{e}|\leq w$.}
+    $X=\{ \symbfit{x}\in\mathbb{F}_q^{k/2} :|\symbfit{x}| =\frac{p}{2} \}$
     
-    \Repeter{$\exists (\textbf{x}_1, \textbf{y}), (\textbf{x}_2, \textbf{y}) \in\mathcal{L}_1 \cap \mathcal{L}_2, |\textbf{y}_{\llbracket 1,n \rrbracket \setminus L}|\leq w-p$}{
+    \Repeter{$\exists (\symbfit{x}_1, \symbfit{y}), (\symbfit{x}_2, \symbfit{y}) \in\mathcal{L}_1 \cap \mathcal{L}_2, |\symbfit{y}_{\llbracket 1,n \rrbracket \setminus L}|\leq w-p$}{
         Choisir un ensemble d'information $I\subseteq\llbracket 1,n\rrbracket$, $|I|=k$, et son complémentaire $J$
         
-        \Si{$\textbf{H}_{J}$ est inversible}{
+        \Si{$\symbfit{H}_{J}$ est inversible}{
         
-        		$\bar{\textbf{s}} \leftarrow \textbf{H}_J^{-1} \textbf{s}$
+        		$\bar{\symbfit{s}} \leftarrow \symbfit{H}_J^{-1} \symbfit{s}$
         		
-        		$\bar{\textbf{A}}\leftarrow \textbf{H}_J^{-1} \textbf{H}_I$
+        		$\bar{\symbfit{P}}\leftarrow \symbfit{H}_J^{-1} \symbfit{H}_I$
         	
-        		On extrait les deux sous-matrices $\bar{\textbf{A}}=[\bar{\textbf{A}}_1 \bar{\textbf{A}}_2 ]$
+        		On extrait les deux sous-matrices $\bar{\symbfit{P}}=[\bar{\symbfit{P}}_1 \bar{\symbfit{P}}_2 ]$
         		
-            $\mathcal{L}_1\leftarrow \big\{  (\textbf{x}, \bar{\textbf{s}}-\bar{\textbf{A}}_1 \textbf{x}^T) : \textbf{x}\in X \big\}$
+            $\mathcal{L}_1\leftarrow \big\{  (\symbfit{x}, \bar{\symbfit{s}}-\bar{\symbfit{P}}_1 \symbfit{x}^T) : \symbfit{x}\in X \big\}$
             
         			
-            $\mathcal{L}_2\leftarrow\big\{ (\textbf{x},\bar{\textbf{A}}_2 \textbf{x}^T) : \textbf{x}\in X \big\}$
+            $\mathcal{L}_2\leftarrow\big\{ (\symbfit{x},\bar{\symbfit{P}}_2 \symbfit{x}^T) : \symbfit{x}\in X \big\}$
             
             Choisir un ensemble $L$ de $l$ positions
         }
     }
-    \Retour{$\textbf{e}$ tel que $\textbf{e}_I=\textbf{x}$ et $\textbf{e}_J = \textbf{y}^T$ ($\textbf{y}$ obtenu à partir de $\textbf{x}$, $\mathcal{L}$ est une table de hachage).}
+    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{x}$ et $\symbfit{e}_J = \symbfit{y}^T$ ($\symbfit{y}$ obtenu à partir de $\symbfit{x}$, $\mathcal{L}$ est une table de hachage).}
 \caption{Algorithme de Stern}
 \end{algorithm}
 
-L'algorithme est correct, et la preuve est analogue à celle de Lee-Brickell (même calcul avec $\textbf{e}_I=\textbf{x}_1+\textbf{x}_2$).
+L'algorithme est correct, et la preuve est analogue à celle de Lee-Brickell (même calcul avec $\symbfit{e}_I=\symbfit{x}_1+\symbfit{x}_2$).
 
-On se place dans le pire des cas ($|\textbf{e}|=w$).
-Une solution est trouvée à la fin d'une itération si $\textbf{e}_I$ est de poids $p$ (événement $E_1$), que de plus le poids de $\textbf{e}_I$ soit distribué de manière égale en $\textbf{x}_1$ et $\textbf{x}_2$ (événement $E_2$), et enfin que $l$ positions de $\textbf{e}_J$ de poids $w-p$ soient nulles (événement $E_3$).
+On se place dans le pire des cas ($|\symbfit{e}|=w$).
+Une solution est trouvée à la fin d'une itération si $\symbfit{e}_I$ est de poids $p$ (événement $E_1$), que de plus le poids de $\symbfit{e}_I$ soit distribué de manière égale en $\symbfit{x}_1$ et $\symbfit{x}_2$ (événement $E_2$), et enfin que $l$ positions de $\symbfit{e}_J$ de poids $w-p$ soient nulles (événement $E_3$).
 
 On obtient que la probabilité de trouver une solution spécifique est, les événements étant indépendants:
 
@@ -286,7 +287,7 @@ On obtient que la probabilité de trouver une solution spécifique est, les év�
 Donc la probabilité de trouver n'importe quelle solution est
 
 \begin{align*}
-\mathbb{P}_{\text{succès}} &\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w}}\max \{ 1, |\text{DecSynd}(\textbf{H},\textbf{s},w)| \}\\
+\mathbb{P}_{\text{succès}} &\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w}}\max \{ 1, |\text{DecSynd}(\symbfit{H},\symbfit{s},w)| \}\\
 &\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w} \min \{ 1, \frac{q^{n-k}}{\binom{n}{w}(q-1)^w} \}}.
 \end{align*}
 
