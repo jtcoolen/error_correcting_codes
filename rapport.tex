@@ -130,6 +130,8 @@ avec \[\alpha\coloneq \min\big\{ h_q\big(\omega\big), 1-R \big\} - ( 1-R)h_q\big
 $T_{Prange}$ est maximal lorsque $\tbinom{n}{w}(q-1)^w=q^{n-k}$ donc lorsque $w=d_{GV}\coloneq h_q^{-1}(1-R)$. En effet $\delta_{GV}(R)\coloneq d_{GV}/n=h_q^{-1}(1-R)+o(1)$ et $\binom{n}{d_{GV}}(q-1)^{d_{GV}}=O(q^{nh_q(d_{GV}/n)})=O(q^{nh_q(h_q^{-1}(1-k/n))})=O(q^{n-k})$. %Mouais, pas super rigoureux le traitement du o(1)
 \end{remark}
 
+La complexité de cet algo de décodage par ensemble d'information est donc exponentielle en le nombre d'erreurs $w$ du mot à décoder si l'on cherche une solution particulière. Et pour $w$ fixé, il faut $n$ grand pour obtenir une complexité (= borne supérieure sur la sécurité) de l'ordre de $2^{100}$ (donc la taille des clés = longueur des lignes de la matrice de parité = longueur des colonnes de la matrice génératrice du code explose).
+
 \begin{figure}[h]
 \centering
 \includegraphics{decodage_syndrome/prange.pdf}
@@ -147,14 +149,21 @@ L'idée est de relaxer la condition de Prange ($|\symbfit{e}_I|=0$) pour amortir
     \SetAlgoLined
     \Donnees{$\symbfit{H}\in\mathbb{F}_q^{(n-k)\times n}$, $\symbfit{s}\in\mathbb{F}_q^{n-k}$, $w\in\llbracket 0, n\rrbracket$.}
     \Res{$\symbfit{e}\in\mathbb{F}_q^{n}$ tel que $\symbfit{H}\symbfit{e}^T = \symbfit{s}$ et $|\symbfit{e}|\leq w$.}
-    \Repeter{$\exists \symbfit{y}\in\mathcal{L}, |\symbfit{y}|\leq w-p$}{
+    $X=\{ \symbfit{x}\in\mathbb{F}_q^{k} :|\symbfit{x}| = p \}$
+    
+    $\mathcal{L}$ est une table de hachage, indexée par des éléments de $\mathbb{F}_q^{n-k}$
+    	
+    \Repeter{$\exists (\symbfit{y},\symbfit{x})\in\mathcal{L}, |\symbfit{y}|\leq w-p$}{
+    
         Choisir un ensemble d'information $I\subseteq\llbracket 1,n\rrbracket$, $|I|=k$, et son complémentaire $J$
         
+        \PourTous{$\symbfit{x}\in X$}{
         \Si{$\symbfit{H}_{J}$ est inversible}{
-            $\mathcal{L}\leftarrow\{ \symbfit{H}_J^{-1}\symbfit{s} - \symbfit{H}_J^{-1}\symbfit{H}_I\symbfit{x}^T : |\symbfit{x}|=p\}$
+            $\mathcal{L}[\symbfit{H}_J^{-1}\symbfit{s} - \symbfit{H}_J^{-1}\symbfit{H}_I\symbfit{x}^T]\leftarrow\symbfit{x}$
+        }
         }
     }
-    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{x}$ et $\symbfit{e}_J = \symbfit{y}^T$ ($\symbfit{y}$ obtenu à partir de $\symbfit{x}$, $\mathcal{L}$ est une table de hachage).}
+    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{x}$ et $\symbfit{e}_J = \symbfit{y}^T$ ($\symbfit{y}$ clé obtenue à partir de $\symbfit{x}$).}
 \caption{Algorithme de Lee-Brickell}
 \end{algorithm}
 
@@ -246,7 +255,9 @@ Si $\mathcal{L}_1\cap \mathcal{L}_2\neq \emptyset$, on a des solutions $\symbfit
     \Res{$\symbfit{e}_\in\mathbb{F}_q^{n}$ tel que $\symbfit{H}\symbfit{e}^T = \symbfit{s}$ et $|\symbfit{e}|\leq w$.}
     $X=\{ \symbfit{x}\in\mathbb{F}_q^{k/2} :|\symbfit{x}| =\frac{p}{2} \}$
     
-    \Repeter{$\exists (\symbfit{x}_1, \symbfit{y}), (\symbfit{x}_2, \symbfit{y}) \in\mathcal{L}_1 \cap \mathcal{L}_2, |\symbfit{y}_{\llbracket 1,n \rrbracket \setminus L}|\leq w-p$}{
+    $\mathcal{L}_1, \mathcal{L}_2$ des tables de hachage, indexées par des éléments de $\mathbb{F}_q^{n-k}$
+    
+    \Repeter{$\exists (\symbfit{y}, \symbfit{x}_1), (\symbfit{y}, \symbfit{x}_2) \in\mathcal{L}_1 \times \mathcal{L}_2, |\symbfit{y}_{\llbracket 1,n \rrbracket \setminus L}|\leq w-p$}{
         Choisir un ensemble d'information $I\subseteq\llbracket 1,n\rrbracket$, $|I|=k$, et son complémentaire $J$
         
         \Si{$\symbfit{H}_{J}$ est inversible}{
@@ -257,15 +268,16 @@ Si $\mathcal{L}_1\cap \mathcal{L}_2\neq \emptyset$, on a des solutions $\symbfit
         	
         		On extrait les deux sous-matrices $\bar{\symbfit{P}}=[\bar{\symbfit{P}}_1 \bar{\symbfit{P}}_2 ]$
         		
-            $\mathcal{L}_1\leftarrow \big\{  (\symbfit{x}, \bar{\symbfit{s}}-\bar{\symbfit{P}}_1 \symbfit{x}^T) : \symbfit{x}\in X \big\}$
+        		\PourTous{$\symbfit{x}\in X$}{
+            $\mathcal{L}_1[\bar{\symbfit{s}}-\bar{\symbfit{P}}_1 \symbfit{x}^T]\leftarrow  \symbfit{x} $
             
         			
-            $\mathcal{L}_2\leftarrow\big\{ (\symbfit{x},\bar{\symbfit{P}}_2 \symbfit{x}^T) : \symbfit{x}\in X \big\}$
-            
+            $\mathcal{L}_2[\bar{\symbfit{P}}_2 \symbfit{x}^T]\leftarrow \symbfit{x}$
+            }
             Choisir un ensemble $L$ de $l$ positions
         }
     }
-    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{x}$ et $\symbfit{e}_J = \symbfit{y}^T$ ($\symbfit{y}$ obtenu à partir de $\symbfit{x}$, $\mathcal{L}$ est une table de hachage).}
+    \Retour{$\symbfit{e}$ tel que $\symbfit{e}_I=\symbfit{x}$ et $\symbfit{e}_J = \symbfit{y}^T$ (pour une clé $\symbfit{y}$ obtenu à partir de $\symbfit{x}$, $\mathcal{L}$ est une table de hachage).}
 \caption{Algorithme de Stern}
 \end{algorithm}
 
@@ -291,7 +303,8 @@ Donc la probabilité de trouver n'importe quelle solution est
 &\geq \frac{\binom{k/2}{p/2}^2\binom{n-k-l}{w-p}}{\binom{n}{w} \min \{ 1, \frac{q^{n-k}}{\binom{n}{w}(q-1)^w} \}}.
 \end{align*}
 
-Le coût d'une itération est dominé par la recherche de collision et les multiplications de matrices: $C=\binom{k/2}{p/2}(q-1)^{p/2}(k/2)^3$.
+Le coût d'une itération est dominé par la recherche de collision (parcours des clés d'une des listes $\mathcal{L}_1$, linéaire en la taille de $\mathcal{L}_1$) et les multiplications de matrices: $C=\binom{k/2}{p/2}(q-1)^{p/2}(k/2)^3$.
+Il faut aussi ajouter la probabilité d'obtenir une collision
 
 On obtient donc comme complexité temporelle
 
