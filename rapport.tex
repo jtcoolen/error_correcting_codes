@@ -1,8 +1,8 @@
-\documentclass{scrartcl}[a4paper,9pt,headings=small,footinclude=false]
+\documentclass[a4paper,11pt,headings=small,footinclude=false]{scrartcl}
 
-\usepackage[bottom=3cm,top=3cm,
+%\usepackage[bottom=3cm,top=3cm,
   %,showframe% <- only to show the page layout
-]{geometry}
+%]{geometry}
 \setkomafont{disposition}{\normalfont\bfseries}
 \setkomafont{section}{\normalfont\normalsize\bfseries}
 \setlength{\parskip}{.5em}
@@ -56,6 +56,13 @@
 \usepackage{graphicx}
 \usepackage{float}
 
+\usepackage{caption}
+\captionsetup{%
+   justification=raggedright,
+   labelfont=sc,
+  singlelinecheck=off
+}
+
 \title{Projets de codes correcteurs}
 \author{\normalsize Julien Coolen}
 \date{\normalsize\today}
@@ -63,7 +70,7 @@
 \begin{document}
 \maketitle
 \tableofcontents
-
+\raggedright
 \section{Décodage par syndrôme}
 \subsection{Algorithme de Prange}
 
@@ -219,7 +226,7 @@ La complexité asymptotique de Lee-Brickell est $\tilde{O}(q^{n\alpha})$ pour
 \begin{figure}[h]
 \centering
 \includegraphics{decodage_syndrome/LB.pdf}
-\caption{Complexité asymptotique de Lee-Brickell pour un rendement $R=\frac{1}{2}$ et $p=2$. La distance de Gilbert-Varshamov est la plus difficile à décoder. On observe bien le gain d'un facteur polynomial $O(n^3)$ avec l'échelle logarithmique: pour de petites valeurs de $w$ l'amélioration se dégrade.}
+\caption{Complexité asymptotique de Lee-Brickell pour un rendement $R=\frac{1}{2}$ et $p=2$. La distance de Gilbert-Varshamov est la plus difficile à décoder.}
 \label{fig:prange}
 \end{figure}
 
@@ -323,7 +330,7 @@ Sa complexité asymptotique est, pour $w=\lfloor \omega n \rfloor, p = \lfloor \
 \begin{figure}[h!]
 \centering
 \includegraphics{decodage_syndrome/Stern.pdf}
-\caption{Complexité asymptotique de Stern pour un rendement $R=\frac{1}{2}$.}
+\caption{Complexité asymptotique de Stern pour un rendement $R=\frac{1}{2}$. On observe bien que de petites valeurs de $w$ l'amélioration se dégrade car le coût de l'énumération domine.}
 \label{fig:prange}
 \end{figure}
 
