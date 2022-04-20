@@ -19,6 +19,7 @@
   shrink=0
   ]{microtype}
 
+  
 %\usepackage{stix2}
 \usepackage{hyperref}
 \usepackage{fontspec}
@@ -70,7 +71,7 @@
 \begin{document}
 \maketitle
 \tableofcontents
-\raggedright
+%\raggedright
 \section{Décodage par syndrôme}
 \subsection{Algorithme de Prange}
 
@@ -137,7 +138,7 @@ avec \[\alpha\coloneq \min\big\{ h_q\big(\omega\big), 1-R \big\} - ( 1-R)h_q\big
 $T_{Prange}$ est maximal lorsque $\tbinom{n}{w}(q-1)^w=q^{n-k}$ donc lorsque $w=d_{GV}\coloneq h_q^{-1}(1-R)$. En effet $\delta_{GV}(R)\coloneq d_{GV}/n=h_q^{-1}(1-R)+o(1)$ et $\binom{n}{d_{GV}}(q-1)^{d_{GV}}=O(q^{nh_q(d_{GV}/n)})=O(q^{nh_q(h_q^{-1}(1-k/n))})=O(q^{n-k})$. %Mouais, pas super rigoureux le traitement du o(1)
 \end{remark}
 
-La complexité de cet algo de décodage par ensemble d'information est donc exponentielle en le nombre d'erreurs $w$ du mot à décoder si l'on cherche une solution particulière. Et pour $w$ fixé, il faut $n$ grand pour obtenir une complexité (= borne supérieure sur la sécurité) de l'ordre de $2^{100}$ (donc la taille des clés = longueur des lignes de la matrice de parité = longueur des colonnes de la matrice génératrice du code explose).
+La complexité de cet algo de décodage par ensemble d'information est donc exponentielle en le nombre d'erreurs $w$ du mot à décoder si l'on cherche une solution particulière. Et pour $w$ fixé, il faut $n$ grand pour obtenir une complexité (= borne supérieure sur la sécurité) de l'ordre de $2^{100}$ (donc la taille des clés = longueur des lignes de la matrice de parité = longueur des colonnes de la matrice génératrice du code augmente exponentiellement).
 
 \begin{figure}[h]
 \centering
@@ -311,7 +312,7 @@ Donc la probabilité de trouver n'importe quelle solution est
 \end{align*}
 
 Le coût d'une itération est dominé par la recherche de collision (parcours des clés d'une des listes $\mathcal{L}_1$, linéaire en la taille de $\mathcal{L}_1$) et les multiplications de matrices: $C=\binom{k/2}{p/2}(q-1)^{p/2}(k/2)^3$.
-Il faut aussi ajouter la probabilité d'obtenir une collision
+Il faut aussi ajouter la probabilité d'obtenir une collision.
 
 On obtient donc comme complexité temporelle
 
@@ -330,11 +331,17 @@ Sa complexité asymptotique est, pour $w=\lfloor \omega n \rfloor, p = \lfloor \
 \begin{figure}[h!]
 \centering
 \includegraphics{decodage_syndrome/Stern.pdf}
-\caption{Complexité asymptotique de Stern pour un rendement $R=\frac{1}{2}$. On observe bien que de petites valeurs de $w$ l'amélioration se dégrade car le coût de l'énumération domine.}
+\caption{Complexité asymptotique de Stern pour un rendement $R=\frac{1}{2}$.}
 \label{fig:prange}
 \end{figure}
 
 \newpage
+
 \section{Décodage en liste}
+
+\newpage
+\section{Décodage des codes LDPC}
+
+Les produits de probas deviennent des sommes de LLR. Sur de petit processeurs (typiquement pour l'embarqué), les multiplications sont coûteuses, donc une version de belief propagation avec des additions est plus rapide.
 
 \end{document}
